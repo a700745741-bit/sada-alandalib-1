@@ -132,32 +132,38 @@ footer{
 </style></head><body><header>
     <h2>🏆 صدى العندليب</h2>
     <p>نظام فرز التوقعات وجدول ترتيب المشاركين</p>
-</header><nav class="tabs">
-    <button class="tab-btn active" id="sortTab">
-        ⚽ فرز التوقعات
-    </button><button class="tab-btn" id="rankTab">
+</header><nav class="tabs"><button class="tab-btn active" id="sortTab">
+    ⚽ فرز التوقعات
+</button>
+
+<button class="tab-btn" id="rankTab">
     🏆 جدول الترتيب
 </button>
 
 </nav><div class="status" id="status">
     جارٍ تحميل البرنامجين...
-</div><section class="pane active" id="sortPane">
-    <div class="frame-wrap">
-        <iframe
-            id="sortFrame"
-            src="https://a700745741-bit.github.io/sada-alandalib/">
-        </iframe>
-    </div>
-</section><section class="pane" id="rankPane">
-    <div class="frame-wrap">
-        <iframe
-            id="rankFrame"
-            src="https://a700745741-bit.github.io/alsharqandriod/">
-        </iframe>
-    </div>
+</div><section class="pane active" id="sortPane"><div class="frame-wrap">
+
+    <iframe
+        id="sortFrame"
+        src="https://a700745741-bit.github.io/sada-alandalib/">
+    </iframe>
+
+</div>
+
+</section><section class="pane" id="rankPane"><div class="frame-wrap">
+
+    <iframe
+        id="rankFrame"
+        src="https://a700745741-bit.github.io/alsharqandriod/">
+    </iframe>
+
+</div>
+
 </section><footer>
     صدى العندليب | النظام الموحد
 </footer><script>
+
 const sortFrame = document.getElementById("sortFrame");
 const rankFrame = document.getElementById("rankFrame");
 
@@ -171,9 +177,11 @@ const statusBox = document.getElementById("status");
 
 let sortButtonAdded = false;
 
+
 function setStatus(message){
     statusBox.textContent = message;
 }
+
 
 function showTab(which){
 
@@ -191,23 +199,34 @@ function showTab(which){
     });
 }
 
+
 sortTab.addEventListener("click",()=>{
     showTab("sort");
 });
 
+
 rankTab.addEventListener("click",()=>{
     showTab("rank");
-    setStatus("يمكنك استخدام جدول الترتيب بصورة مستقلة أو استقبال الأسماء المنقولة إليه.");
+
+    setStatus(
+        "يمكنك استخدام جدول الترتيب أو استقبال الأسماء المنقولة من فرز التوقعات."
+    );
 });
 
 
 function getFrameDocument(frame){
+
     try{
+
         return frame.contentDocument ||
                frame.contentWindow.document;
+
     }catch(error){
+
         return null;
+
     }
+
 }
 
 
@@ -226,24 +245,34 @@ function waitForElement(frame,id,timeout=30000){
                 const element = doc.getElementById(id);
 
                 if(element){
+
                     clearInterval(timer);
                     resolve(element);
+
                     return;
+
                 }
+
             }
 
             if(Date.now()-start > timeout){
+
                 clearInterval(timer);
-                reject(new Error("انتهت مهلة انتظار العنصر: "+id));
+
+                reject(
+                    new Error("انتهت مهلة انتظار العنصر: "+id)
+                );
+
             }
 
         },300);
 
     });
+
 }
 
 
-/* إضافة زر النقل داخل برنامج الفرز الأصلي */
+/* إضافة زر نقل الأسماء إلى برنامج الفرز */
 
 async function addTransferButton(){
 
@@ -261,10 +290,11 @@ async function addTransferButton(){
         const button = doc.createElement("button");
 
         button.id = "sendToRankBtn";
+
         button.type = "button";
 
         button.textContent =
-            "📥 نقل الأسماء الصحيحة إلى جدول الترتيب";
+            "📥 نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة";
 
         button.style.cssText = `
             display:block;
@@ -279,6 +309,7 @@ async function addTransferButton(){
             font-weight:bold;
             cursor:pointer;
             box-shadow:0 3px 8px #0002;
+            line-height:1.6;
         `;
 
         originalSortButton.insertAdjacentElement(
@@ -286,11 +317,16 @@ async function addTransferButton(){
             button
         );
 
-        button.addEventListener("click",transferCorrectNames);
+        button.addEventListener(
+            "click",
+            transferCorrectNames
+        );
 
         sortButtonAdded = true;
 
-        setStatus("تم تحميل برنامج الفرز. بعد الفرز يمكنك نقل الأسماء الصحيحة إلى جدول الترتيب.");
+        setStatus(
+            "تم تحميل برنامج الفرز. بعد الفرز يمكنك نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة."
+        );
 
     }catch(error){
 
@@ -299,24 +335,29 @@ async function addTransferButton(){
         );
 
         console.error(error);
+
     }
+
 }
 
 
-/* استخراج جميع المشاركين الذين أصابوا مباراة واحدة على الأقل */
+/* استخراج كل من أصاب مباراة واحدة على الأقل */
 
 function extractCorrectNames(){
 
     const win = sortFrame.contentWindow;
 
     const expression = `
+
         (function(){
 
             if(
                 typeof lastPeople === "undefined" ||
                 typeof lastCorrect === "undefined"
             ){
+
                 throw new Error("بيانات الفرز غير جاهزة");
+
             }
 
             const mode =
@@ -340,10 +381,14 @@ function extractCorrectNames(){
                 });
 
             }).map(function(p){
+
                 return String(p.name || "").trim();
+
             }).filter(Boolean);
 
+
             const unique = [];
+
             const seen = new Set();
 
             names.forEach(function(name){
@@ -351,8 +396,11 @@ function extractCorrectNames(){
                 const key = name.toLowerCase();
 
                 if(!seen.has(key)){
+
                     seen.add(key);
+
                     unique.push(name);
+
                 }
 
             });
@@ -360,49 +408,65 @@ function extractCorrectNames(){
             return unique;
 
         })()
+
     `;
 
     return win.eval(expression);
+
 }
 
 
-/* نقل الأسماء إلى خانة الإضافة الجماعية */
+/* نقل الأسماء إلى خانة إضافة المشاركين بالجملة */
 
 async function transferCorrectNames(){
 
     const button =
-        getFrameDocument(sortFrame).getElementById("sendToRankBtn");
+        getFrameDocument(sortFrame)
+        .getElementById("sendToRankBtn");
 
     try{
 
         if(button){
+
             button.disabled = true;
-            button.textContent = "⏳ جارٍ تجهيز الأسماء...";
+
+            button.textContent =
+                "⏳ جارٍ تجهيز الأسماء...";
+
         }
 
+
         const names = extractCorrectNames();
+
 
         if(!names || names.length === 0){
 
             alert(
-                "لم يتم العثور على أسماء أصابت مباراة واحدة على الأقل.\nتأكد من تنفيذ الفرز وإدخال نتائج المباريات."
+                "لم يتم العثور على أسماء أصابت مباراة واحدة على الأقل.\n"+
+                "تأكد من تنفيذ الفرز وإدخال نتائج المباريات."
             );
 
-            if(button){
-                button.disabled = false;
-                button.textContent =
-                    "📥 نقل الأسماء الصحيحة إلى جدول الترتيب";
-            }
-
             return;
+
         }
 
-        setStatus("تم العثور على "+names.length+" مشاركًا. جارٍ فتح جدول الترتيب...");
+
+        setStatus(
+            "تم العثور على "+names.length+
+            " مشاركًا. جارٍ فتح خانة الإضافة الجماعية..."
+        );
+
+
+        /* الوصول إلى خانة الإضافة الجماعية */
 
         const bulkNames =
             await waitForElement(rankFrame,"bulkNames");
 
-        const rankDoc = getFrameDocument(rankFrame);
+        const rankDoc =
+            getFrameDocument(rankFrame);
+
+
+        /* وضع الأسماء داخل الخانة فقط دون إضافتها */
 
         bulkNames.value = names.join("\n");
 
@@ -414,12 +478,19 @@ async function transferCorrectNames(){
             new Event("change",{bubbles:true})
         );
 
+
+        /* الانتقال إلى تبويب جدول الترتيب */
+
         showTab("rank");
+
 
         setStatus(
             "✅ تم نقل "+names.length+
-            " اسمًا إلى خانة الإضافة الجماعية. حدد النقاط ثم اضغط «فرز وإضافة»."
+            " اسمًا إلى خانة إضافة المشاركين بالجملة. حدد النقاط ثم اضغط فرز وإضافة."
         );
+
+
+        /* التركيز على خانة النقاط */
 
         const pointsInput =
             rankDoc.getElementById("bulkPoints");
@@ -427,67 +498,94 @@ async function transferCorrectNames(){
         if(pointsInput){
 
             setTimeout(()=>{
+
                 pointsInput.focus();
+
                 pointsInput.select();
+
             },500);
 
         }else{
+
             bulkNames.focus();
+
         }
 
+
         alert(
-            "تم نقل "+names.length+" اسمًا بنجاح.\n\n"+
+
+            "✅ تم نقل "+names.length+" اسمًا بنجاح.\n\n"+
+
+            "الأسماء موجودة الآن في خانة إضافة المشاركين بالجملة.\n\n"+
+
             "الخطوة التالية:\n"+
+
             "1- حدد عدد النقاط لكل اسم.\n"+
-            "2- اضغط زر «فرز وإضافة» في جدول الترتيب.\n\n"+
-            "سيقوم البرنامج الأصلي بتحديث النقاط وإعادة ترتيب المشاركين."
+
+            "2- اضغط زر «فرز وإضافة».\n\n"+
+
+            "سيقوم البرنامج الأصلي بإضافة النقاط وتحديث الأسماء وإعادة ترتيب الجدول."
+
         );
+
 
     }catch(error){
 
         console.error(error);
 
         alert(
+
             "حدث خطأ أثناء نقل الأسماء.\n"+
-            "تأكد من أن برنامج جدول الترتيب قد تم تحميله."
+            "تأكد من تحميل برنامج جدول الترتيب."
+
         );
 
-        setStatus("تعذر إتمام النقل. راجع تحميل البرنامجين.");
+        setStatus(
+            "تعذر إتمام النقل. راجع تحميل البرنامجين."
+        );
 
     }finally{
 
         if(button){
+
             button.disabled = false;
+
             button.textContent =
-                "📥 نقل الأسماء الصحيحة إلى جدول الترتيب";
+                "📥 نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة";
+
         }
 
     }
+
 }
 
 
 /* مراقبة تحميل برنامج الفرز */
 
 sortFrame.addEventListener("load",()=>{
+
     addTransferButton();
+
 });
 
 
-/* مراقبة تحميل برنامج الترتيب */
+/* مراقبة تحميل جدول الترتيب */
 
 rankFrame.addEventListener("load",()=>{
 
     setStatus(
-        "تم تحميل جدول الترتيب. يمكنك استخدامه مباشرة أو استقبال الأسماء من برنامج الفرز."
+        "تم تحميل جدول الترتيب بنجاح."
     );
 
 });
 
 
-/* محاولة إضافية في حال كان البرنامج قد حُمّل قبل تشغيل المراقبة */
+/* محاولة إضافية لإضافة الزر */
 
 setTimeout(()=>{
+
     addTransferButton();
+
 },1500);
 
 </script></body>
