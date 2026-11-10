@@ -6,15 +6,11 @@
 :root{
     --main:#0755bd;
     --dark:#062b59;
-    --light:#eaf2ff;
-    --white:#fff;
     --bg:#f1f5fb;
     --green:#13834b;
 }
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
@@ -26,21 +22,12 @@ body{
 header{
     background:linear-gradient(135deg,var(--dark),var(--main));
     color:white;
-    padding:17px 12px;
+    padding:18px 12px;
     text-align:center;
-    box-shadow:0 3px 12px #0002;
 }
 
-header h2{
-    margin:0 0 7px;
-    font-size:22px;
-}
-
-header p{
-    margin:0;
-    font-size:13px;
-    opacity:.9;
-}
+header h2{margin:0 0 7px}
+header p{margin:0;font-size:13px}
 
 .tabs{
     display:flex;
@@ -50,7 +37,6 @@ header p{
     position:sticky;
     top:0;
     z-index:20;
-    box-shadow:0 2px 7px #0001;
 }
 
 .tab-btn{
@@ -58,11 +44,10 @@ header p{
     border:0;
     border-radius:9px;
     padding:13px 7px;
-    font-size:15px;
+    font-size:14px;
     font-weight:bold;
     background:#e8eef8;
     color:var(--dark);
-    cursor:pointer;
 }
 
 .tab-btn.active{
@@ -72,30 +57,23 @@ header p{
 
 .status{
     margin:10px;
-    padding:11px;
+    padding:12px;
     border-radius:9px;
     background:#e5f2ff;
     color:#06447e;
     font-size:13px;
     text-align:center;
-    line-height:1.7;
+    line-height:1.8;
 }
 
-.pane{
-    display:none;
-    padding:0 8px 12px;
-}
-
-.pane.active{
-    display:block;
-}
+.pane{display:none;padding:0 8px 12px}
+.pane.active{display:block}
 
 .frame-wrap{
     width:100%;
     background:white;
     border-radius:10px;
     overflow:hidden;
-    box-shadow:0 2px 10px #0001;
 }
 
 iframe{
@@ -113,22 +91,6 @@ footer{
     font-size:11px;
     color:#718096;
 }
-
-@media(max-width:600px){
-    header h2{
-        font-size:19px;
-    }
-
-    .tab-btn{
-        font-size:13px;
-        padding:12px 4px;
-    }
-
-    iframe{
-        height:80vh;
-        min-height:600px;
-    }
-}
 </style></head><body><header>
     <h2>🏆 صدى العندليب</h2>
     <p>نظام فرز التوقعات وجدول ترتيب المشاركين</p>
@@ -142,50 +104,47 @@ footer{
 
 </nav><div class="status" id="status">
     جارٍ تحميل البرنامجين...
-</div><section class="pane active" id="sortPane"><div class="frame-wrap">
-
-    <iframe
-        id="sortFrame"
-        src="https://a700745741-bit.github.io/sada-alandalib/">
-    </iframe>
-
-</div>
-
-</section><section class="pane" id="rankPane"><div class="frame-wrap">
-
-    <iframe
-        id="rankFrame"
-        src="https://a700745741-bit.github.io/alsharqandriod/">
-    </iframe>
-
-</div>
-
+</div><section class="pane active" id="sortPane">
+    <div class="frame-wrap">
+        <iframe
+            id="sortFrame"
+            src="https://a700745741-bit.github.io/sada-alandalib/">
+        </iframe>
+    </div>
+</section><section class="pane" id="rankPane">
+    <div class="frame-wrap">
+        <iframe
+            id="rankFrame"
+            src="https://a700745741-bit.github.io/alsharqandriod/">
+        </iframe>
+    </div>
 </section><footer>
     صدى العندليب | النظام الموحد
 </footer><script>
 
-const sortFrame = document.getElementById("sortFrame");
-const rankFrame = document.getElementById("rankFrame");
+const sortFrame=document.getElementById("sortFrame");
+const rankFrame=document.getElementById("rankFrame");
 
-const sortTab = document.getElementById("sortTab");
-const rankTab = document.getElementById("rankTab");
+const sortTab=document.getElementById("sortTab");
+const rankTab=document.getElementById("rankTab");
 
-const sortPane = document.getElementById("sortPane");
-const rankPane = document.getElementById("rankPane");
+const sortPane=document.getElementById("sortPane");
+const rankPane=document.getElementById("rankPane");
 
-const statusBox = document.getElementById("status");
+const statusBox=document.getElementById("status");
 
-let sortButtonAdded = false;
+const NEW_BUTTON_TEXT =
+"📥 نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة";
 
 
 function setStatus(message){
-    statusBox.textContent = message;
+    statusBox.textContent=message;
 }
 
 
 function showTab(which){
 
-    const isSort = which === "sort";
+    const isSort=which==="sort";
 
     sortPane.classList.toggle("active",isSort);
     rankPane.classList.toggle("active",!isSort);
@@ -193,38 +152,25 @@ function showTab(which){
     sortTab.classList.toggle("active",isSort);
     rankTab.classList.toggle("active",!isSort);
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
 
-sortTab.addEventListener("click",()=>{
-    showTab("sort");
-});
+sortTab.onclick=()=>showTab("sort");
 
-
-rankTab.addEventListener("click",()=>{
+rankTab.onclick=()=>{
     showTab("rank");
-
-    setStatus(
-        "يمكنك استخدام جدول الترتيب أو استقبال الأسماء المنقولة من فرز التوقعات."
-    );
-});
+    setStatus("جدول الترتيب جاهز للاستخدام.");
+};
 
 
-function getFrameDocument(frame){
+function getDoc(frame){
 
     try{
-
         return frame.contentDocument ||
                frame.contentWindow.document;
-
-    }catch(error){
-
+    }catch(e){
         return null;
-
     }
 
 }
@@ -234,35 +180,21 @@ function waitForElement(frame,id,timeout=30000){
 
     return new Promise((resolve,reject)=>{
 
-        const start = Date.now();
+        const start=Date.now();
 
-        const timer = setInterval(()=>{
+        const timer=setInterval(()=>{
 
-            const doc = getFrameDocument(frame);
+            const doc=getDoc(frame);
+            const el=doc && doc.getElementById(id);
 
-            if(doc){
-
-                const element = doc.getElementById(id);
-
-                if(element){
-
-                    clearInterval(timer);
-                    resolve(element);
-
-                    return;
-
-                }
-
+            if(el){
+                clearInterval(timer);
+                resolve(el);
             }
 
-            if(Date.now()-start > timeout){
-
+            if(Date.now()-start>timeout){
                 clearInterval(timer);
-
-                reject(
-                    new Error("انتهت مهلة انتظار العنصر: "+id)
-                );
-
+                reject(new Error("لم يتم العثور على "+id));
             }
 
         },300);
@@ -272,31 +204,42 @@ function waitForElement(frame,id,timeout=30000){
 }
 
 
-/* إضافة زر نقل الأسماء إلى برنامج الفرز */
+/* إنشاء زر النقل بالاسم الجديد */
 
 async function addTransferButton(){
 
-    if(sortButtonAdded) return;
-
     try{
 
-        const originalSortButton =
+        const oldSortButton=
             await waitForElement(sortFrame,"sortBtn");
 
-        const doc = getFrameDocument(sortFrame);
+        const doc=getDoc(sortFrame);
 
-        if(!doc) return;
+        if(!doc)return;
 
-        const button = doc.createElement("button");
+        let button=doc.getElementById("sendToRankBtn");
 
-        button.id = "sendToRankBtn";
+        if(!button){
 
-        button.type = "button";
+            button=doc.createElement("button");
 
-        button.textContent =
-            "📥 نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة";
+            button.id="sendToRankBtn";
+            button.type="button";
 
-        button.style.cssText = `
+            oldSortButton.insertAdjacentElement(
+                "afterend",
+                button
+            );
+
+        }
+
+        /* فرض النص الجديد في كل مرة */
+
+        button.textContent=NEW_BUTTON_TEXT;
+
+        button.innerText=NEW_BUTTON_TEXT;
+
+        button.style.cssText=`
             display:block;
             width:100%;
             margin:12px 0;
@@ -308,167 +251,131 @@ async function addTransferButton(){
             font-size:16px;
             font-weight:bold;
             cursor:pointer;
-            box-shadow:0 3px 8px #0002;
-            line-height:1.6;
+            line-height:1.7;
         `;
 
-        originalSortButton.insertAdjacentElement(
-            "afterend",
-            button
-        );
-
-        button.addEventListener(
-            "click",
-            transferCorrectNames
-        );
-
-        sortButtonAdded = true;
+        button.onclick=transferCorrectNames;
 
         setStatus(
-            "تم تحميل برنامج الفرز. بعد الفرز يمكنك نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة."
+            "تم تحميل الفرز. زر نقل الأسماء إلى إضافة المشاركين بالجملة جاهز."
         );
 
     }catch(error){
 
-        setStatus(
-            "تعذر الوصول إلى زر الفرز. تأكد من تحميل البرنامج الأصلي."
-        );
-
         console.error(error);
+
+        setStatus(
+            "تعذر تجهيز زر النقل. تحقق من تحميل برنامج الفرز."
+        );
 
     }
 
 }
 
 
-/* استخراج كل من أصاب مباراة واحدة على الأقل */
+/* استخراج كل الأسماء التي أصابت مباراة واحدة على الأقل */
 
 function extractCorrectNames(){
 
-    const win = sortFrame.contentWindow;
+    const expression=`
 
-    const expression = `
+    (function(){
 
-        (function(){
+        if(
+            typeof lastPeople==="undefined" ||
+            typeof lastCorrect==="undefined"
+        ){
+            throw new Error("بيانات الفرز غير جاهزة");
+        }
 
-            if(
-                typeof lastPeople === "undefined" ||
-                typeof lastCorrect === "undefined"
-            ){
+        const mode=document.getElementById("matchMode").value;
 
-                throw new Error("بيانات الفرز غير جاهزة");
+        const names=lastPeople.filter(function(p){
 
-            }
+            return lastCorrect.some(function(cm){
 
-            const mode =
-                document.getElementById("matchMode").value;
-
-            const names = lastPeople.filter(function(p){
-
-                return lastCorrect.some(function(cm){
-
-                    return resultKnown(cm) &&
-                        isCorrect(
-                            matchParticipantGame(
-                                p,
-                                cm,
-                                mode,
-                                new Set()
-                            ),
-                            cm
-                        );
-
-                });
-
-            }).map(function(p){
-
-                return String(p.name || "").trim();
-
-            }).filter(Boolean);
-
-
-            const unique = [];
-
-            const seen = new Set();
-
-            names.forEach(function(name){
-
-                const key = name.toLowerCase();
-
-                if(!seen.has(key)){
-
-                    seen.add(key);
-
-                    unique.push(name);
-
-                }
+                return resultKnown(cm) &&
+                    isCorrect(
+                        matchParticipantGame(
+                            p,
+                            cm,
+                            mode,
+                            new Set()
+                        ),
+                        cm
+                    );
 
             });
 
-            return unique;
+        }).map(function(p){
 
-        })()
+            return String(p.name||"").trim();
+
+        }).filter(Boolean);
+
+        const unique=[];
+        const seen=new Set();
+
+        names.forEach(function(name){
+
+            const key=name.toLowerCase();
+
+            if(!seen.has(key)){
+                seen.add(key);
+                unique.push(name);
+            }
+
+        });
+
+        return unique;
+
+    })()
 
     `;
 
-    return win.eval(expression);
+    return sortFrame.contentWindow.eval(expression);
 
 }
 
 
-/* نقل الأسماء إلى خانة إضافة المشاركين بالجملة */
+/* نقل الأسماء إلى خانة الإضافة الجماعية فقط */
 
 async function transferCorrectNames(){
 
-    const button =
-        getFrameDocument(sortFrame)
-        .getElementById("sendToRankBtn");
+    const doc=getDoc(sortFrame);
+    const button=doc && doc.getElementById("sendToRankBtn");
 
     try{
 
         if(button){
-
-            button.disabled = true;
-
-            button.textContent =
-                "⏳ جارٍ تجهيز الأسماء...";
-
+            button.disabled=true;
+            button.textContent="⏳ جارٍ تجهيز الأسماء...";
         }
 
+        const names=extractCorrectNames();
 
-        const names = extractCorrectNames();
-
-
-        if(!names || names.length === 0){
+        if(!names.length){
 
             alert(
-                "لم يتم العثور على أسماء أصابت مباراة واحدة على الأقل.\n"+
-                "تأكد من تنفيذ الفرز وإدخال نتائج المباريات."
+                "لم يتم العثور على أسماء صحيحة. نفّذ الفرز أولاً."
             );
 
             return;
-
         }
-
 
         setStatus(
             "تم العثور على "+names.length+
-            " مشاركًا. جارٍ فتح خانة الإضافة الجماعية..."
+            " مشاركًا. جارٍ نقلهم إلى خانة الإضافة الجماعية..."
         );
 
-
-        /* الوصول إلى خانة الإضافة الجماعية */
-
-        const bulkNames =
+        const bulkNames=
             await waitForElement(rankFrame,"bulkNames");
 
-        const rankDoc =
-            getFrameDocument(rankFrame);
+        const rankDoc=getDoc(rankFrame);
 
+        /* تعبئة خانة الأسماء فقط */
 
-        /* وضع الأسماء داخل الخانة فقط دون إضافتها */
-
-        bulkNames.value = names.join("\n");
+        bulkNames.value=names.join("\n");
 
         bulkNames.dispatchEvent(
             new Event("input",{bubbles:true})
@@ -478,81 +385,53 @@ async function transferCorrectNames(){
             new Event("change",{bubbles:true})
         );
 
-
-        /* الانتقال إلى تبويب جدول الترتيب */
+        /* الانتقال إلى تبويب الجدول */
 
         showTab("rank");
-
 
         setStatus(
             "✅ تم نقل "+names.length+
             " اسمًا إلى خانة إضافة المشاركين بالجملة. حدد النقاط ثم اضغط فرز وإضافة."
         );
 
-
-        /* التركيز على خانة النقاط */
-
-        const pointsInput =
+        const pointsInput=
             rankDoc.getElementById("bulkPoints");
 
         if(pointsInput){
 
             setTimeout(()=>{
-
                 pointsInput.focus();
-
                 pointsInput.select();
-
             },500);
 
         }else{
-
             bulkNames.focus();
-
         }
 
-
         alert(
-
-            "✅ تم نقل "+names.length+" اسمًا بنجاح.\n\n"+
-
-            "الأسماء موجودة الآن في خانة إضافة المشاركين بالجملة.\n\n"+
-
-            "الخطوة التالية:\n"+
-
-            "1- حدد عدد النقاط لكل اسم.\n"+
-
-            "2- اضغط زر «فرز وإضافة».\n\n"+
-
-            "سيقوم البرنامج الأصلي بإضافة النقاط وتحديث الأسماء وإعادة ترتيب الجدول."
-
+            "تم نقل "+names.length+" اسمًا بنجاح.\n\n"+
+            "الأسماء موجودة في خانة إضافة المشاركين بالجملة.\n\n"+
+            "1- حدد النقاط.\n"+
+            "2- اضغط زر فرز وإضافة.\n\n"+
+            "سيقوم البرنامج الأصلي بإضافة المشاركين وتحديث نقاطهم وترتيب الجدول."
         );
-
 
     }catch(error){
 
         console.error(error);
 
         alert(
-
-            "حدث خطأ أثناء نقل الأسماء.\n"+
-            "تأكد من تحميل برنامج جدول الترتيب."
-
+            "حدث خطأ أثناء النقل. تأكد من تحميل البرنامجين."
         );
 
-        setStatus(
-            "تعذر إتمام النقل. راجع تحميل البرنامجين."
-        );
+        setStatus("تعذر إتمام النقل.");
 
     }finally{
 
         if(button){
-
-            button.disabled = false;
-
-            button.textContent =
-                "📥 نقل الأسماء الصحيحة إلى إضافة المشاركين بالجملة";
-
+            button.disabled=false;
+            button.textContent=NEW_BUTTON_TEXT;
+            button.innerText=NEW_BUTTON_TEXT;
         }
 
     }
@@ -560,33 +439,33 @@ async function transferCorrectNames(){
 }
 
 
-/* مراقبة تحميل برنامج الفرز */
+/* تحميل البرنامجين */
 
 sortFrame.addEventListener("load",()=>{
-
     addTransferButton();
-
 });
-
-
-/* مراقبة تحميل جدول الترتيب */
 
 rankFrame.addEventListener("load",()=>{
-
-    setStatus(
-        "تم تحميل جدول الترتيب بنجاح."
-    );
-
+    setStatus("تم تحميل جدول الترتيب.");
 });
 
+/* إعادة فرض الاسم الجديد احتياطياً */
 
-/* محاولة إضافية لإضافة الزر */
+setInterval(()=>{
 
-setTimeout(()=>{
+    const doc=getDoc(sortFrame);
 
-    addTransferButton();
+    const button=doc &&
+        doc.getElementById("sendToRankBtn");
 
-},1500);
+    if(button){
+        button.textContent=NEW_BUTTON_TEXT;
+        button.innerText=NEW_BUTTON_TEXT;
+    }
+
+},2000);
+
+setTimeout(addTransferButton,1500);
 
 </script></body>
 </html>
